@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displayAnswer('Loading...', true);
 
         try {
-            const response = await fetch('http://127.0.0.1:3000/answer', {
+            const response = await fetch('https://ai-powered-chatbot-h39n.onrender.com', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
