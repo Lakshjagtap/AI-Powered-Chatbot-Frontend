@@ -6,17 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to submit the question
     async function submitQuestion() {
         const question = questionInput.value.trim();
-
+    
         // Check if input is empty
         if (!question) {
             displayAnswer('Please enter a question!', true);
             return;
         }
-
+    
         // Show loading indicator
         displayAnswer('Loading...', true);
-
+    
         try {
+            console.log("Sending request to server...");
+    
             const response = await fetch('https://ai-powered-chatbot-mffj.onrender.com/answer', {
                 method: 'POST',
                 headers: {
@@ -27,26 +29,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     similarity_threshold: 0.2
                 })
             });
-
-            // If response is successful
+    
+            console.log("Received response from server:", response);
+    
             if (response.ok) {
                 const data = await response.json();
-
+                console.log("Response data:", data);
+    
                 if (data.status === 'success') {
                     displayAnswer(`Answer: ${data.answer}`);
                 } else if (data.status === 'warning') {
                     displayAnswer(`Warning: ${data.message}`, true);
                 }
             } else {
-                // Handle non-OK response (e.g., 4xx, 5xx)
                 const data = await response.json();
+                console.log("Error response:", data);
                 displayAnswer(`Error: ${data.message || 'Unable to fetch answer. Please try again later.'}`, true);
             }
         } catch (error) {
-            // Handle network or other errors
+            console.error("Network or request error:", error);
             displayAnswer('Error: Unable to connect to the server.', true);
         }
     }
+    
 
     // Function to display the answer
     function displayAnswer(message, isError = false) {
