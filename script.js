@@ -22,12 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('https://ai-powered-chatbot-9hy0.onrender.com/answer', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    question: question,
-                    similarity_threshold: 0.2
-                })
+                    question: question,  
+                    similarity_threshold: 0.2  
+                }),
             });
     
             console.log("Received response from server:", response);
