@@ -28,14 +28,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             });
 
-            const data = await response.json();
+            // If response is successful
+            if (response.ok) {
+                const data = await response.json();
 
-            if (data.status === 'success') {
-                displayAnswer(`Answer: ${data.answer}`);
-            } else if (data.status === 'warning') {
-                displayAnswer(`Warning: ${data.message}`, true);
+                if (data.status === 'success') {
+                    displayAnswer(`Answer: ${data.answer}`);
+                } else if (data.status === 'warning') {
+                    displayAnswer(`Warning: ${data.message}`, true);
+                }
+            } else {
+                // Handle non-OK response (e.g., 4xx, 5xx)
+                const data = await response.json();
+                displayAnswer(`Error: ${data.message || 'Unable to fetch answer. Please try again later.'}`, true);
             }
         } catch (error) {
+            // Handle network or other errors
             displayAnswer('Error: Unable to connect to the server.', true);
         }
     }
