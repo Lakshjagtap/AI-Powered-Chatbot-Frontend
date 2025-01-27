@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displayAnswer('Loading...', true);
 
         try {
-            const response = await fetch('https://ai-powered-chatbot-mffj.onrender.com', {
+            const response = await fetch('https://ai-powered-chatbot-mffj.onrender.com/answer', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
