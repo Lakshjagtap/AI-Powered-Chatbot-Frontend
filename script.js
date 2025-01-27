@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             console.log("Sending request to server...");
     
-            const response = await fetch('https://ai-powered-chatbot-9hy0.onrender.com/answer', {
+            const response = await fetch('https://ai-powered-chatbot-rt9q.onrender.com/answer', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
