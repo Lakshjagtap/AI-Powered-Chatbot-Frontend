@@ -1,64 +1,291 @@
-/* Reset styles */
-body, h1, input, button {
+/* Global Reset */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body styling */
+/* Body Styling */
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: #333;
+    background-color: #121212; /* Dark background */
+    color: #fff;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    padding: 20px; /* Adding space around the content */
     margin: 0;
 }
 
-/* Container styling */
-.container {
-    background: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+/* Chat Container */
+.chat-container {
+    background: #1f1f1f; /* Slightly lighter dark background */
     width: 100%;
-    max-width: 400px;
+    max-width: 600px; /* Ensures the container doesn’t stretch too much on larger screens */
+    height: 85vh;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    margin: 0 auto; /* Center the container and provide space on the left and right */
+}
+
+/* Chat Header */
+.chat-header {
+    background: #333333; /* Dark grey for the header */
+    color: #fff;
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
     text-align: center;
 }
 
-/* Header */
-h1 {
-    font-size: 26px;
-    color: #444;
-    margin-bottom: 20px;
+.chat-header h1 {
+    font-size: 22px;
     font-weight: bold;
 }
 
-/* Input field */
-input[type="text"] {
-    width: 100%;
+/* Chat Window */
+.chat-window {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #181818; /* Dark gray background */
+    border-top: 2px solid #333;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1), 0 0 25px rgba(255, 255, 255, 0.2);
+}
+
+/* Chat Bubbles */
+.chat-bubble {
+    max-width: 70%;
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Chatbot Bubble */
+.chat-bubble.bot {
+    background: #00e5ff;
+    color: #121212;
+    align-self: flex-start;
+    border-top-left-radius: 0;
+}
+
+/* User Bubble */
+.chat-bubble.user {
+    background: #00e676;
+    color: #121212;
+    align-self: flex-end;
+    border-top-right-radius: 0;
+}
+
+/* Shadow effect for chat bubbles */
+.chat-bubble.bot, .chat-bubble.user {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.chat-bubble.bot:hover, .chat-bubble.user:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+}
+
+/* Chat Footer */
+.chat-footer {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    border-top: 2px solid #333;
+    background: #1f1f1f; /* Matching dark footer */
+    border-radius: 0 0 20px 20px;
+}
+
+/* Input Field */
+#questionInput {
+    flex: 1;
     padding: 12px 15px;
-    margin-bottom: 20px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    outline: none;
+    background-color: #121212;
+    color: #fff;
     transition: border-color 0.3s ease;
 }
 
-input[type="text"]:focus {
-    border-color: #2575fc;
-    outline: none;
+#questionInput:focus {
+    border-color: #757575; /* Subtle gray focus */
 }
 
-/* Button styling */
-button {
-    width: 100%;
-    padding: 12px;
-    background: #2575fc;
+/* Send Button */
+#submitBtn {
+    padding: 12px 20px;
+    font-size: 14px;
     color: #fff;
+    background: #333333; /* Dark button color */
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
-} 
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#submitBtn:hover {
+    background: #424242; /* Darker gray on hover */
+    transform: scale(1.05);
+}
+
+#submitBtn:active {
+    background: #212121; /* Darker gray on click */
+}
+
+/* Scrollbar Styling */
+.chat-window::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-window::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+.chat-window::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+/* Typing Indicator (Bot) */
+.typing-indicator {
+    font-size: 14px;
+    color: #757575; /* Subtle gray for typing indicator */
+    font-style: italic;
+    margin-top: 10px;
+    animation: typing 1s steps(5) infinite;
+}
+
+/* Typing Animation */
+@keyframes typing {
+    0% {
+        content: '.'; 
+    }
+    25% {
+        content: '..'; 
+    }
+    50% {
+        content: '...'; 
+    }
+    75% {
+        content: '....'; 
+    }
+    100% {
+        content: '.....'; 
+    }
+}
+
+/* Responsiveness for smaller screens */
+@media (max-width: 1024px) {
+    /* Adjust container width and padding for tablets */
+    .chat-container {
+        max-width: 90%;
+        height: 80vh;
+        border-radius: 15px;
+        margin: 10px;
+    }
+
+    .chat-header {
+        padding: 15px;
+    }
+
+    .chat-header h1 {
+        font-size: 20px;
+    }
+
+    .chat-bubble {
+        max-width: 75%;
+        font-size: 13px;
+        padding: 12px;
+    }
+
+    #questionInput {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    #submitBtn {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    .chat-container {
+        max-width: 100%;
+        height: 90vh;
+        border-radius: 10px;
+        margin: 15px;
+    }
+
+    .chat-header {
+        padding: 10px;
+    }
+
+    .chat-header h1 {
+        font-size: 18px;
+    }
+
+    .chat-window {
+        padding: 15px;
+    }
+
+    .chat-bubble {
+        max-width: 80%;
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    #questionInput {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    #submitBtn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .chat-container {
+        max-width: 100%;
+        height: 95vh;
+        border-radius: 10px;
+        margin: 20px;
+    }
+
+    .chat-header h1 {
+        font-size: 16px;
+    }
+
+    .chat-window {
+        padding: 10px;
+    }
+
+    .chat-bubble {
+        max-width: 90%;
+        font-size: 11px;
+        padding: 8px;
+    }
+
+    #questionInput {
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+
+    #submitBtn {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+}

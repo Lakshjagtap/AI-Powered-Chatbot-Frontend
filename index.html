@@ -4,17 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ Chatbot</title>
+    <title>Modern FAQ Chatbot</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div class="container">
-        <h1>FAQ Chatbot</h1>
-        <input type="text" id="questionInput" placeholder="Ask me anything..." />
-        <button id="submitBtn">Ask</button>
-        <div id="answerBox" class="answer-box hidden"></div>
+    <div class="chat-container">
+        <header class="chat-header">
+            <h1>Chatbot for Customer Support</h1>
+        </header>
+        <div id="chatWindow" class="chat-window">
+            <!-- Messages will be dynamically added here -->
+        </div>
+        <footer class="chat-footer">
+            <input type="text" id="questionInput" placeholder="Ask me anything..." />
+            <button id="submitBtn">Send</button>
+        </footer>
     </div>
+
     <script src="script.js"></script>
 </body>
 

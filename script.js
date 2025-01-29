@@ -1,70 +1,77 @@
 document.addEventListener('DOMContentLoaded', () => {
     const questionInput = document.getElementById('questionInput');
     const submitBtn = document.getElementById('submitBtn');
-    const answerBox = document.getElementById('answerBox');
+    const chatWindow = document.getElementById('chatWindow');
 
-    // Function to submit the question
+    // Function to add a message bubble to the chat
+    function addMessage(message, isBot = false) {
+        const messageBubble = document.createElement('div');
+        messageBubble.className = `chat-bubble ${isBot ? 'bot' : 'user'}`;
+        messageBubble.textContent = message;
+        chatWindow.appendChild(messageBubble);
+
+        // Auto-scroll to the latest message
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+        return messageBubble; // Return the message bubble for typing effect
+    }
+
+    // Function to simulate typing effect
+    function typeMessage(message, messageBubble) {
+        let index = 0;
+        messageBubble.textContent = ""; // Start with an empty bubble
+
+        const typingInterval = setInterval(() => {
+            messageBubble.textContent += message[index];
+            index++;
+            if (index === message.length) {
+                clearInterval(typingInterval); // Stop typing once the message is fully displayed
+            }
+        }, 50); // Delay between characters (adjust for speed)
+    }
+
+    // Function to submit a question
     async function submitQuestion() {
         const question = questionInput.value.trim();
-    
-        // Check if input is empty
-        if (!question) {
-            displayAnswer('Please enter a question!', true);
-            return;
-        }
-    
-        // Show loading indicator
-        displayAnswer('Loading...', true);
-    
+        if (!question) return;
+
+        // Add user message to chat (this appears immediately)
+        addMessage(question);
+
+        // Clear input field
+        questionInput.value = '';
+
+        // Simulate loading (show bot typing)
+        const loadingBubble = addMessage('Loading...', true);
+
         try {
-            console.log("Sending request to server...");
-    
+            // Send request to API
             const response = await fetch('https://ai-powered-chatbot-rt9q.onrender.com/answer', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    question: question,  
-                    similarity_threshold: 0.2  
-                }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question, similarity_threshold: 0.2 }),
             });
-    
-            console.log("Received response from server:", response);
-    
+
+            // Remove loading message after response is received
+            if (loadingBubble) {
+                chatWindow.removeChild(loadingBubble);
+            }
+
             if (response.ok) {
                 const data = await response.json();
-                console.log("Response data:", data);
-    
-                if (data.status === 'success') {
-                    displayAnswer(`Answer: ${data.answer}`);
-                } else if (data.status === 'warning') {
-                    displayAnswer(`Warning: ${data.message}`, true);
-                }
+                const answer = data.answer || 'Sorry, I could not find an answer.';
+                const botMessageBubble = addMessage(answer, true); // Add the bot's response to the chat window
+                typeMessage(answer, botMessageBubble); // Type the message slowly in the bubble
             } else {
-                const data = await response.json();
-                console.log("Error response:", data);
-                displayAnswer(`Error: ${data.message || 'Unable to fetch answer. Please try again later.'}`, true);
+                addMessage('Error: Unable to fetch the answer. Please try again later.', true);
             }
         } catch (error) {
-            console.error("Network or request error:", error);
-            displayAnswer('Error: Unable to connect to the server.', true);
+            console.error(error);
+            addMessage('Error: Unable to connect to the server.', true);
         }
     }
-    
 
-    // Function to display the answer
-    function displayAnswer(message, isError = false) {
-        answerBox.style.display = 'block';
-        answerBox.style.backgroundColor = isError ? '#ffe6e6' : '#e6f0ff';
-        answerBox.style.borderColor = isError ? '#ff4d4d' : '#2575fc';
-        answerBox.innerText = message;
-    }
-
-    // Event listener for the submit button
+    // Event listeners
     submitBtn.addEventListener('click', submitQuestion);
-
-    // Optional: Submit on Enter key
     questionInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
             submitQuestion();
