@@ -39,17 +39,34 @@ body {
 /* Chat Header */
 .chat-header {
     background: #202020;
-    background-size: cover;
-    background-position: center;
     color: #fff;
     padding: 20px;
     text-align: center;
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 200;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+#clearChatBtn {
+    background-color: #ff4d4d;  /* Red button color */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+#clearChatBtn:hover {
+    background-color: #e60000;  /* Darker red when hovered */
+}
+
 
 /* Chat Window */
 .chat-window {
@@ -129,7 +146,7 @@ body {
 
 /* Hover Effects for Chat Bubbles */
 .chat-bubble.bot:hover, .chat-bubble.user:hover {
-    transform: perspective(600px) rotateY(15deg) translateZ(20px);
+    transform: perspective(600px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     
 }
@@ -226,7 +243,7 @@ body {
     }
 
     .chat-header {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     .chat-bubble {
@@ -238,6 +255,12 @@ body {
     #questionInput {
         padding: 12px;
         font-size: 14px;
+    }
+
+    #clearChatBtn {
+        padding: 12px 20px;
+        font-size: 14px;
+
     }
 
     #submitBtn {
@@ -254,7 +277,7 @@ body {
     }
 
     .chat-header {
-        font-size: 1rem;
+        font-size: 0.8rem;
         padding: 18px;
     }
 
@@ -273,6 +296,11 @@ body {
         font-size: 12px;
     }
 
+    #clearChatBtn {
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+
     #submitBtn {
         padding: 10px 15px;
         font-size: 12px;
@@ -286,7 +314,7 @@ body {
     }
 
     .chat-header {
-        font-size: 0.9rem;
+        font-size: 0.6rem;
         padding: 15px;
     }
 
@@ -302,6 +330,11 @@ body {
 
     #questionInput {
         padding: 12px;
+        font-size: 12px;
+    }
+
+    #clearChatBtn {
+        padding: 9px 9px;
         font-size: 12px;
     }
 

@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const questionInput = document.getElementById('questionInput');
     const submitBtn = document.getElementById('submitBtn');
     const chatWindow = document.getElementById('chatWindow');
+    const clearChatBtn = document.getElementById('clearChatBtn');
     const typingIndicator = document.createElement('div');
     typingIndicator.className = 'typing-indicator';
     typingIndicator.textContent = 'Bot is typing...';
@@ -110,22 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
         { question: "Can I get a price adjustment?", answer: "Price adjustments can only be made if an item goes on sale within 7 days of your purchase. Contact support for help." },
         { question: "Do you offer a loyalty program?", answer: "We’re working on a loyalty program! Stay tuned for updates or sign up for our newsletter to learn more." }
     ];
-
-    // Function to find answer from hardcoded data
-// Function to find answer from hardcoded data
-function findAnswer(question) {
-    // Convert question to lowercase for case-insensitive matching
-    const normalizedQuestion = question.toLowerCase();
-
-    // Check for matches in a more flexible way
-    const entry = qaData.find(item => {
-        // Compare both the question and the normalized question to handle plurals and variations
-        return normalizedQuestion.includes(item.question.toLowerCase());
-    });
-
-    return entry ? entry.answer : "Sorry, I couldn't find an answer to that. Please ask something else or contact support.";
-}
-
+         // Function to find answer from hardcoded data
+    function findAnswer(question) {
+        const normalizedQuestion = question.toLowerCase();
+        const entry = qaData.find(item => normalizedQuestion.includes(item.question.toLowerCase()));
+        return entry ? entry.answer : "Sorry, I couldn't find an answer to that.";
+    }
 
     // Function to add a message bubble
     function addMessage(message, isBot = false) {
@@ -134,6 +125,7 @@ function findAnswer(question) {
         messageBubble.textContent = message;
         chatWindow.appendChild(messageBubble);
         chatWindow.scrollTop = chatWindow.scrollHeight;
+        saveConversation(); // Save the conversation to localStorage after each message
     }
 
     // Function to simulate typing effect
@@ -141,21 +133,21 @@ function findAnswer(question) {
         let i = 0;
         const speed = 50; // Speed of typing (milliseconds)
         const botMessage = document.createElement('div');
-        botMessage.className = 'chat-bubble bot';
-        chatWindow.appendChild(botMessage);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
+        botMessage.className = 'chat-bubble bot'; // Bot message class
+        chatWindow.appendChild(botMessage); // Append the bot message to chat window
+        chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom
 
         function typeNextChar() {
             if (i < message.length) {
-                botMessage.textContent += message.charAt(i);
+                botMessage.textContent += message.charAt(i); // Add one character at a time
                 i++;
-                setTimeout(typeNextChar, speed);
+                setTimeout(typeNextChar, speed); // Continue typing with delay
             } else {
-                callback(); // Call callback function when typing is finished
+                callback(); // Call the callback function when typing is finished
             }
         }
 
-        typeNextChar();
+        typeNextChar(); // Start typing
     }
 
     // Function to submit question
@@ -168,8 +160,39 @@ function findAnswer(question) {
 
         setTimeout(() => {
             const answer = findAnswer(question);
-            typeEffect(answer, () => {}); // Start typing effect for the bot's response
-        }, 500); // Simulate some delay before bot responds
+            typeEffect(answer, () => {
+                // You can trigger additional actions here after typing is done (if needed)
+            });
+        }, 500); // Simulate a short delay before the bot starts typing
+    }
+
+    // Function to load previous conversation from localStorage
+    function loadConversation() {
+        const savedConversation = JSON.parse(localStorage.getItem('chatHistory'));
+        if (savedConversation && Array.isArray(savedConversation)) {
+            savedConversation.forEach(({ message, isBot }) => {
+                addMessage(message, isBot);
+            });
+        }
+    }
+
+    // Function to save conversation to localStorage
+    function saveConversation() {
+        const allMessages = [];
+        const chatBubbles = document.querySelectorAll('.chat-bubble');
+        chatBubbles.forEach(bubble => {
+            allMessages.push({
+                message: bubble.textContent,
+                isBot: bubble.classList.contains('bot')
+            });
+        });
+        localStorage.setItem('chatHistory', JSON.stringify(allMessages));
+    }
+
+    // Function to clear the chat
+    function clearChat() {
+        chatWindow.innerHTML = ''; // Clear the chat window
+        localStorage.removeItem('chatHistory'); // Remove chat history from localStorage
     }
 
     // Event listeners
@@ -179,4 +202,9 @@ function findAnswer(question) {
             submitQuestion();
         }
     });
+
+    clearChatBtn.addEventListener('click', clearChat); // Add event listener for the delete button
+
+    // Load previous conversation from localStorage when page loads
+    loadConversation();
 });
