@@ -112,10 +112,20 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // Function to find answer from hardcoded data
-    function findAnswer(question) {
-        const entry = qaData.find(item => item.question.toLowerCase() === question.toLowerCase());
-        return entry ? entry.answer : "Sorry, I couldn't find an answer to that. Please ask something else or contact support.";
-    }
+// Function to find answer from hardcoded data
+function findAnswer(question) {
+    // Convert question to lowercase for case-insensitive matching
+    const normalizedQuestion = question.toLowerCase();
+
+    // Check for matches in a more flexible way
+    const entry = qaData.find(item => {
+        // Compare both the question and the normalized question to handle plurals and variations
+        return normalizedQuestion.includes(item.question.toLowerCase());
+    });
+
+    return entry ? entry.answer : "Sorry, I couldn't find an answer to that. Please ask something else or contact support.";
+}
+
 
     // Function to add a message bubble
     function addMessage(message, isBot = false) {
