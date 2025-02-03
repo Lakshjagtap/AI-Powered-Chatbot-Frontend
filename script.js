@@ -56,39 +56,39 @@ document.addEventListener('DOMContentLoaded', () => {
         { question: "What are your customer support hours?", answer: "Our support team is available 24/7 to assist you. What do you need help with?" },
         { question: "Do you have a physical store?", answer: "We operate online only, but offer fast shipping worldwide. Let me know if you need assistance finding something." },
         { question: "Can I speak to a human agent?", answer: "Sure! You can reach out to our live chat or call 1-800-123-4567 to speak with a representative." },
-    
+
         // Account & Orders
         { question: "How can I reset my password?", answer: "You can reset your password by visiting the 'Forgot Password' section on the login page. Need help with that?" },
         { question: "Where is my order?", answer: "You can track your order through our website or by checking the tracking number sent to your email. Let me know if you need further assistance!" },
         { question: "Can I change my shipping address?", answer: "You can update your shipping address by contacting customer support. Once an order is shipped, we can’t change the address." },
         { question: "How can I cancel my order?", answer: "If your order hasn’t been shipped yet, we can cancel it. Please contact customer service immediately for assistance." },
         { question: "What payment methods do you accept?", answer: "We accept credit cards, PayPal, and other secure payment methods. You can select your preferred option at checkout." },
-    
+
         // Product Inquiries
         { question: "Do you have discounts?", answer: "Yes! We offer discounts throughout the year. Use code SAVE20 to get 20% off select items." },
         { question: "What products do you sell?", answer: "We offer a variety of products, including electronics, home goods, apparel, and more. What are you looking for?" },
         { question: "Can I get a refund?", answer: "Yes, we offer refunds within 30 days of purchase. Please check our return policy for more details or contact support." },
         { question: "Is this product in stock?", answer: "You can check the product availability on the product page, or let me know the item you're interested in!" },
         { question: "What are your best-selling products?", answer: "Some of our best-sellers include [insert popular products]. Would you like to check out any of them?" },
-    
+
         // Shipping
         { question: "How long does shipping take?", answer: "Shipping typically takes 3-7 business days, depending on your location. You can check shipping details during checkout." },
         { question: "Do you ship internationally?", answer: "Yes, we offer international shipping. We ship to most countries worldwide. Let me know your location, and I’ll check shipping options." },
         { question: "What shipping options do you offer?", answer: "We offer standard, expedited, and express shipping. You can choose your preferred option during checkout." },
         { question: "Can I change my shipping method?", answer: "Once your order is placed, we cannot change the shipping method. However, if your order hasn’t shipped yet, we might be able to assist you." },
-    
+
         // Returns & Refunds
         { question: "How do I return an item?", answer: "You can return items within 30 days of purchase. Please visit our Returns page for instructions or contact support for further help." },
         { question: "What is your return policy?", answer: "Our return policy allows returns within 30 days for most items. Please check the item’s eligibility or contact customer support." },
         { question: "When will I get my refund?", answer: "Refunds are processed within 7-10 business days after we receive the returned item. You will be notified via email." },
         { question: "Can I exchange an item?", answer: "Exchanges are possible for certain items. Please contact support for further assistance with exchanges." },
-    
+
         // Discounts & Promotions
         { question: "Do you have any discount codes?", answer: "Yes! Use code SAVE20 to get 20% off selected items. Would you like help applying it?" },
         { question: "How can I apply a promo code?", answer: "Simply enter the promo code during checkout in the discount code box. Need help with this?" },
         { question: "Are there any seasonal sales?", answer: "We have sales during major holidays and special events throughout the year. Stay tuned for our next big sale!" },
         { question: "How do I know if an item is on sale?", answer: "Items on sale are clearly marked with a discount percentage or 'Sale' label on the product page." },
-    
+
         // More Questions (20 additional questions)
         { question: "Can I upgrade my order to expedited shipping?", answer: "Yes, you can upgrade to expedited shipping if your order hasn’t shipped yet. Contact customer support for assistance." },
         { question: "What should I do if my item is defective?", answer: "If your item is defective, please contact us immediately so we can assist you with a replacement or refund." },
@@ -111,27 +111,26 @@ document.addEventListener('DOMContentLoaded', () => {
         { question: "Can I get a price adjustment?", answer: "Price adjustments can only be made if an item goes on sale within 7 days of your purchase. Contact support for help." },
         { question: "Do you offer a loyalty program?", answer: "We’re working on a loyalty program! Stay tuned for updates or sign up for our newsletter to learn more." }
     ];
-         // Function to find answer from hardcoded data
+    // Function to find answer from hardcoded data
     function findAnswer(question) {
         const normalizedQuestion = question.toLowerCase();
         const entry = qaData.find(item => normalizedQuestion.includes(item.question.toLowerCase()));
         return entry ? entry.answer : "Sorry, I couldn't find an answer to that.";
     }
 
-    // Function to add a message bubble
     function addMessage(message, isBot = false) {
         const messageBubble = document.createElement('div');
         messageBubble.className = `chat-bubble ${isBot ? 'bot' : 'user'}`;
         messageBubble.textContent = message;
         chatWindow.appendChild(messageBubble);
         chatWindow.scrollTop = chatWindow.scrollHeight;
-        saveConversation(); // Save the conversation to localStorage after each message
+        saveConversation(); // Save the conversation after adding each message
     }
 
     // Function to simulate typing effect
     function typeEffect(message, callback) {
         let i = 0;
-        const speed = 50; // Speed of typing (milliseconds)
+        const speed = 20; // Speed of typing (milliseconds)
         const botMessage = document.createElement('div');
         botMessage.className = 'chat-bubble bot'; // Bot message class
         chatWindow.appendChild(botMessage); // Append the bot message to chat window
@@ -144,11 +143,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(typeNextChar, speed); // Continue typing with delay
             } else {
                 callback(); // Call the callback function when typing is finished
+                saveConversation(); // Save the conversation after bot finishes typing
             }
         }
 
         typeNextChar(); // Start typing
     }
+
 
     // Function to submit question
     function submitQuestion() {
@@ -171,10 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedConversation = JSON.parse(localStorage.getItem('chatHistory'));
         if (savedConversation && Array.isArray(savedConversation)) {
             savedConversation.forEach(({ message, isBot }) => {
-                addMessage(message, isBot);
+                addMessage(message, isBot); // Add both user and bot messages
             });
         }
     }
+
 
     // Function to save conversation to localStorage
     function saveConversation() {
